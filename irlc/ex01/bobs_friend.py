@@ -11,25 +11,35 @@ class BobFriendEnvironment(gymnasium.Env):
 
     def reset(self):
         # TODO: 1 lines missing.
-        raise NotImplementedError("Insert your solution and remove this error.")
+        self.s = self.x0
         return self.s, {}
 
     def step(self, a):
         # TODO: 9 lines missing.
-        raise NotImplementedError("Insert your solution and remove this error.")
+        if a == 0:
+            s_next = self.s * 1.1
+        elif a == 1:
+            if np.random.rand() < 0.75:  # With probability 0.75, we get the money back plus 2 kroner
+                s_next = self.s + 12
+            else:  # With probability 0.25, we lose all the money
+                s_next = 0
+        else:
+            raise ValueError("Invalid action")
+        reward = s_next - self.s  # Reward is the change in money
+        terminated = True  # The episode ends after one step
         return s_next, reward, terminated, False, {}
 
 class AlwaysAction_u0(Agent):
     def pi(self, s, k, info=None):  
         """This agent should always take action u=0."""
         # TODO: 1 lines missing.
-        raise NotImplementedError("Implement function body")
+        s = s * 1.1
 
 class AlwaysAction_u1(Agent):
     def pi(self, s, k, info=None):  
         """This agent should always take action u=1."""
         # TODO: 1 lines missing.
-        raise NotImplementedError("Implement function body")
+        s = (3/4) * (s + 12)
 
 if __name__ == "__main__":
     # Part A:
