@@ -33,13 +33,13 @@ class AlwaysAction_u0(Agent):
     def pi(self, s, k, info=None):  
         """This agent should always take action u=0."""
         # TODO: 1 lines missing.
-        s = s * 1.1
+        return 0
 
 class AlwaysAction_u1(Agent):
     def pi(self, s, k, info=None):  
         """This agent should always take action u=1."""
         # TODO: 1 lines missing.
-        s = (3/4) * (s + 12) # wtf
+        return 1
 
 if __name__ == "__main__":
     # Part A:
