@@ -55,7 +55,7 @@ class KuramotoModel(ControlModel):
         Note you can use trigonometric functions like ``sym.cos``.
         """
         # TODO: 1 lines missing.
-        raise NotImplementedError("Implement symbolic expression as a singleton list here")
+        symbolic_f_list = [sym.cos(x[0]) + u[0]]
         # define the symbolic expression 
         return symbolic_f_list  
 
@@ -65,7 +65,7 @@ def f(x, u):
     The answer should be returned as a singleton list. """
     cmodel = KuramotoModel()
     # TODO: 1 lines missing.
-    raise NotImplementedError("Insert your solution and remove this error.")
+    f_value = np.cos(x) + u
     # Use the ContiniousKuramotoModel to compute f(x,u). If in doubt, insert a breakpoint and let pycharms autocomplete
     # guide you. See my video to Exercise 2 for how to use the debugger. Don't forget to specify t (for instance t=0).
     # Note that sympys error messages can be a bit unforgiving.
@@ -93,7 +93,13 @@ def rk4_simulate(x0, u, t0, tF, N=1000):
         x_next = None # Obtain x_next = x_{k+1} using a single RK4 step.
         # Remember to insert breakpoints and use the console to examine what the various variables are.
         # TODO: 7 lines missing.
-        raise NotImplementedError("Insert your solution and remove this error.")
+        Delta = tt[k + 1] - tt[k]
+        xn = xs[k]
+        k1 = f(xn, u)
+        k2 = f(xn + 0.5 * Delta * k1, u)
+        k3 = f(xn + 0.5 * Delta * k2, u)
+        k4 = f(xn + Delta * k3, u)
+        x_next = xn + Delta * (k1 + 2*k2 + 2*k3 + k4) / 6
         xs.append(x_next)
     xs = np.stack(xs, axis=0)
     return xs, tt
@@ -119,5 +125,5 @@ if __name__ == "__main__":
     plt.plot(ts_true, xs_true, 'k.-', label='RK4 state sequence x(t) (using model.simulate)')
     plt.plot(ts, xs, 'r-', label='RK4 state sequence x(t) (using your code)')
     plt.legend()
-    #savepdf('kuramoto_rk4')
+    savepdf('kuramoto_rk4')
     plt.show(block=False)
