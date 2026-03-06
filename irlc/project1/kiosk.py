@@ -31,23 +31,63 @@ def plot_policy(pi, title, pdf):
     plt.show()
 
 # TODO: 51 lines missing.
-raise NotImplementedError("Insert your solution and remove this error.")
+class Kiosk1(DPModel): 
+    def __init__(self):
+        self.c_o = 1.5 # Cost per item ordered
+        self.s_p = 2.1 # Selling price per item
+        self.N   = 14  # Number of time steps (days)
+        self.n_s = 20  # Max stock
+        self.n_o = 15  # Max order
+
+    def A(self, x, k): # Action space A_k(x)
+        return set(range(16))
+
+    def S(self, k): # State space S_k
+        return set(range(21))
+
+    def g(self, x, u, w, k): # Cost function g_k(x,u,w)
+        return self.c_o * u - self.s_p * min(x + u, w) # Cost of ordering minus profit of selling
+
+    def f(self, x, u, w, k): # Dynamics f_k(x,u,w)
+        return max(self.n_s, min(0, x + u - w)) # We cannot have negative stock, and we cannot have more than n_s in stock
+
+    def Pw(self, x, u, k): # Distribution over random disturbances 
+        # TODO: 1 lines missing.
+        return {0: 0.3, 3: 0.6, 6: 0.1}
+
+    def gN(self, x):
+        return 0
+    
+class Kiosk2(Kiosk1):
+    def __init__(self):
+        super().__init__()
+        self.c_o = 1.5 # Cost per item ordered
+        self.s_p = 2.1 # Selling price per item
+        self.N   = 14  # Number of time steps (days)
+        self.n_s = 20  # Max stock
+        self.n_o = 15  # Max order
+
+    def g(self, x, u, w, k): # Cost function g_k(x,u,w)
+        return self.c_o * u - self.s_p * min(x + u, w) + 3*max(0, w - x - u - self.n_s) # Cost of ordering minus profit of selling plus cost of lost sales
+
+    def Pw(self, x, u, k):
+        return {w: binom.pmf(w, self.n_s, 1/5) for w in range(self.n_s + 1)}
 
 def warmup_states(): 
     # TODO: 1 lines missing.
-    raise NotImplementedError("return state set")
+    return set(range(21))
 
 def warmup_actions(): 
     # TODO: 1 lines missing.
-    raise NotImplementedError("return action set")
+    return set(range(16))
 
 def solve_kiosk_1(): 
     # TODO: 1 lines missing.
-    raise NotImplementedError("Return cost and policy here (same format as DP_stochastic)")
+    return DP_stochastic(Kiosk1())
 
 def solve_kiosk_2(): 
     # TODO: 1 lines missing.
-    raise NotImplementedError("Return cost and policy here (same format as DP_stochastic)")
+    return DP_stochastic(Kiosk2())
 
 
 def main():
