@@ -24,6 +24,9 @@
 
 
 \newcommand{\m}[1]{\boldsymbol{ #1}}
+\newcommand{\EE}{\mathbb{E}}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
 \newcommand{\yoursolution}{ \redt{(your solution here) } } 
 
 
@@ -86,7 +89,7 @@ Headings have been inserted in the document for readability. You only have to ed
 		
 	\yoursolution The last step of the DP algorithm gives:
 	$$
-	J_{N-1}(20)  = \min_{u_{N-1} } \EE_{w_{N-1} }\left[ g_{N-1}(20, u_{N-1}, w_{N-1} ) +  g_N(x_N) \right]
+	J_{N-1}(20)  = \min_{u_{N-1} } \mathbb{E}_{w_{N-1} }\left[ g_{N-1}(20, u_{N-1}, w_{N-1} ) +  g_N(x_N) \right]
 	$$
 	Therefore ...
 	
