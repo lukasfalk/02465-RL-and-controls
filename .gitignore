@@ -5,9 +5,9 @@
 #solutions/ex03
 #solutions/ex04
 #solutions/ex05
-solutions/ex06
-solutions/ex07
-solutions/ex08
+#solutions/ex06
+#solutions/ex07
+#solutions/ex08
 solutions/ex09
 solutions/ex10
 solutions/ex11
@@ -18,8 +18,8 @@ solutions/ex13
 #irlc/ex04
 #irlc/ex05
 #irlc/ex06
-irlc/ex07
-irlc/ex08
+#irlc/ex07
+#irlc/ex08
 irlc/ex09
 irlc/ex10
 irlc/ex11
@@ -32,8 +32,8 @@ irlc/ex13
 #irlc/tests/tests_week04.py
 #irlc/tests/tests_week05.py
 #irlc/tests/tests_week06.py
-irlc/tests/tests_week07.py
-irlc/tests/tests_week08.py
+#irlc/tests/tests_week07.py
+#irlc/tests/tests_week08.py
 irlc/tests/tests_week09.py
 irlc/tests/tests_week10.py
 irlc/tests/tests_week11.py
@@ -62,8 +62,8 @@ irlc/exam/midterm2023b
 #irlc/lectures/lec04
 #irlc/lectures/lec05
 #irlc/lectures/lec06
-irlc/lectures/lec07
-irlc/lectures/lec08
+#irlc/lectures/lec07
+#irlc/lectures/lec08
 irlc/lectures/lec09
 irlc/lectures/lec10
 irlc/lectures/lec11
