@@ -17,7 +17,7 @@ def fk(x,u):
     """
     dmodel = DiscreteControlModel(KuramotoModel(), dt=0.5)  # this is how we discretize the Kuramoto model.
     # TODO: 1 lines missing.
-    raise NotImplementedError("Compute Euler discretized dynamics here using the dmodel.")
+    f_euler = dmodel.f(x,u) # the function dmodel.f accept various parameters. Perhaps their name can give you an idea?
     return f_euler
 
 def dfk_dx(x,u):
@@ -43,7 +43,7 @@ def dfk_dx(x,u):
     dmodel = DiscreteControlModel(KuramotoModel(), dt=0.5)
     # the function dmodel.f accept various parameters. Perhaps their name can give you an idea?
     # TODO: 1 lines missing.
-    raise NotImplementedError("Insert your solution and remove this error.")
+    f_euler_derivative = dmodel.f_jacobian(x, u)[0]
     return f_euler_derivative
 
 
@@ -79,7 +79,7 @@ if __name__ == "__main__":
     # to simulate a single step.
     for _ in range(10000):
         # TODO: 1 lines missing.
-        raise NotImplementedError("Insert your solution and remove this error.")
+        next_x, cost, terminated, truncated, metadata = env.step([u])
         xs_step.append(next_x)
         ts_step.append(env.time) # This is how you get the current time (in seconds) from the environment.
 
