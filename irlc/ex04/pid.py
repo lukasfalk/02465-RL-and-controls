@@ -32,7 +32,11 @@ class PID:
         :return: Action to take (float)
         """
         # TODO: 6 lines missing.
-        raise NotImplementedError("Compute u here.")
+        e = self.target - x
+        self.I += e * self.dt
+        D = (e - self.e_prior) / self.dt
+        u = self.Kp * e + self.Ki * self.I + self.Kd * D
+        self.e_prior = e
         return u
 
 
@@ -46,7 +50,7 @@ def pid_explicit():
     for _ in range(200): # Simulate for 200 steps, i.e. 0.05 * 200 seconds.
         x_cur = x[-1] # x is the last state [position, velocity]. Note that you only need to pass position to your PID controller.
         # TODO: 1 lines missing.
-        raise NotImplementedError("Compute action here using the pid class.")
+        u = np.array([pid.pi(x_cur[0])])
         u = np.clip(u, -100, 100) # clip actions.
         xp_, reward, done, truncated, _ = env.step(u)
         x.append(xp_)
