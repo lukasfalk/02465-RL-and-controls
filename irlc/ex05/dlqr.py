@@ -97,7 +97,7 @@ def LQR(A : list,  # Dynamic
     > J_N(X_N) = 1/2 * x_N' V[N] x_N + v[N]' x_N + vc[N]
     """
     # TODO: 1 lines missing.
-    V[-] = QN; v[-1] = qN; vc[-1] = qcN
+    V[-1] = QN; v[-1] = qN; vc[-1] = qcN
 
     In = np.eye(n)
     for k in range(N-1,-1,-1):
@@ -121,7 +121,7 @@ def LQR(A : list,  # Dynamic
         Suu = R[k] + B[k].T @ V[k + 1] @ B[k]
         Sux = H[k] + B[k].T @ V[k + 1] @ A[k]
         Su = r[k] + B[k].T @ v[k + 1] + B[k].T @ V[k + 1] @ d[k]
-        L[k] = -np.linalg.solve(np.linalg.inv(Suu), Sux)
+        L[k] = -np.linalg.solve(Suu, Sux)
 
         l[k] = -np.linalg.solve(Suu, Su) # You get this for free. Notice how we use np.lingalg.solve(A,x) to compute A^{-1} x
         V[k] = Q[k] + A[k].T @ V[k+1] @ A[k] - L[k].T @ Suu @ L[k]
