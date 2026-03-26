@@ -1,6 +1,6 @@
 # This file may not be shared/redistributed without permission. Please read copyright notice in the git repo. If this file contains other copyright notices disregard this text.
 import numpy as np
-from irlc.ex05.dlqr import LQR
+from dlqr import LQR
 
 def urnd(sz):
     return np.random.uniform(-1, 1, sz)

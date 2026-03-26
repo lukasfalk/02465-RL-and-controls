@@ -8,8 +8,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from irlc import savepdf
 from irlc import train
-from irlc.ex05.model_boeing import BoeingEnvironment
-from irlc.ex05.lqr_agent import LQRAgent
+from model_boeing import BoeingEnvironment
+from lqr_agent import LQRAgent
 from irlc.ex03.control_model import ControlModel
 import scipy
 
@@ -21,11 +21,10 @@ def boeing_simulation():
     A, B, d = compute_A_B_d(model, dt)
     # Use compute_Q_R_q to get the Q, R, and q matrices in the discretized system
     # TODO: 1 lines missing.
-    raise NotImplementedError("Compute Q, R and q here")
+    Q, R, q = compute_Q_R_q(model, dt)
     ## TODO: Half of each line of code in the following 1 lines have been replaced by garbage. Make it work and remove the error.
     #----------------------------------------------------------------------------------------------------------------------------
-    # agent = LQRAgent(env, A=A??????????????????????????
-    raise NotImplementedError("Use your LQRAgent to plan using the system matrices.")
+    agent = LQRAgent(env, A=A, B=B, Q=Q, R=R, q=q)
     stats, trajectories = train(env, agent, return_trajectory=True)
     return stats, trajectories, env
 
@@ -34,7 +33,9 @@ def compute_Q_R_q(model : ControlModel, dt : float):
     # use print(cost) to see what it contains.
     # Then get the discretized matrices using the techniques described in (Her25, Subsection 13.1.6).
     # TODO: 3 lines missing.
-    raise NotImplementedError("Insert your solution and remove this error.")
+    Q = scipy.linalg.expm(model.Q * dt)
+    R = scipy.linalg.expm(model.R * dt)
+    q = scipy.linalg.expm(model.q * dt)
     return Q, R, q
 
 def compute_A_B_d(model : ControlModel, dt : float):
@@ -46,7 +47,8 @@ def compute_A_B_d(model : ControlModel, dt : float):
     A_discrete = scipy.linalg.expm(model.A * dt)  # This is the discrete A-matrix computed using the matrix exponential
     # Now it is your job to define B_discrete and d_discrete.
     # TODO: 2 lines missing.
-    raise NotImplementedError("Insert your solution and remove this error.")
+    B_discrete = scipy.linalg.expm(model.A * dt) @ model.B * dt
+    d_discrete = scipy.linalg.expm(model.A * dt) @ d * dt
     return A_discrete, B_discrete, d_discrete.flatten()
 
 def boeing_experiment():

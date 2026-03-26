@@ -1,7 +1,7 @@
 # This file may not be shared/redistributed without permission. Please read copyright notice in the git repo. If this file contains other copyright notices disregard this text.
 from irlc.ex04.locomotive import LocomotiveEnvironment
 from irlc import train, plot_trajectory, savepdf, Agent
-from irlc.ex05.dlqr import LQR
+from dlqr import LQR
 from irlc.ex04.control_environment import ControlEnvironment
 import numpy as np
 import matplotlib.pyplot as plt
@@ -14,8 +14,7 @@ class LQRAgent(Agent):
         """ Define self.L, self.l here as the (lists of) control matrices. """
         ## TODO: Half of each line of code in the following 1 lines have been replaced by garbage. Make it work and remove the error.
         #----------------------------------------------------------------------------------------------------------------------------
-        # (self.L, self.l), _ = LQR(A=[A]*N, B=[B]*N, d=[d]*N if d is not No???????????????????????????????????????????????????????????????????
-        raise NotImplementedError("Insert your solution and remove this error.")
+        (self.L, self.l), _ = LQR(A=[A]*N, B=[B]*N, d=[d]*N if d is not None else None, Q=[Q]*N, R=[R]*N, q=[q]*N if q is not None else None, QN=Q, qN=q if q is not None else None)
         self.dt = env.dt
         super().__init__(env)
 
@@ -25,7 +24,7 @@ class LQRAgent(Agent):
         You should use self.L, self.l to get the control matrices (i.e. L_k = self.L[k] ),
         """
         # TODO: 1 lines missing.
-        raise NotImplementedError("Compute current action here")
+        u = self.L[k] @ x + self.l[k]
         return u
 
 
