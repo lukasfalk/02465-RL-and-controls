@@ -138,7 +138,8 @@ class StationaryBandit(BanditEnvironment):
          Remember it is 0 if the optimal action is selected.
          """
         # TODO: 2 lines missing.
-        raise NotImplementedError("Insert your solution and remove this error.")
+        reward = self.q_star[a] + np.random.randn()  # Reward is q^*_a + noise, where noise is N(0,1).
+        gab = np.max(self.q_star) - self.q_star[a]
         # Actual logic goes here. Use self.q_star[a] to get mean reward and np.random.randn() to generate random numbers.  
         return reward, gab 
 

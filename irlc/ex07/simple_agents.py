@@ -24,17 +24,23 @@ class BasicAgent(Agent):
         if t == 0:
             # At step 0 of episode. Re-initialize data structure. 
             # TODO: 2 lines missing.
-            raise NotImplementedError("Insert your solution and remove this error.")
+            self.Q = np.zeros((self.k))  # Action-value estimates.
+            self.N = np.zeros((self.k))  # Number of times we have taken each
         # compute action here 
         # TODO: 1 lines missing.
-        raise NotImplementedError("Insert your solution and remove this error.")
+        if np.random.rand() < self.epsilon:
+            a = np.random.choice(self.k)
+        else:
+            a = np.argmax(self.Q)
+        return a
 
     def train(self, s, a, r, sp, done=False, info_s=None, info_sp=None): 
         """ Since this is a bandit, done, s, sp, info_s, info_sp can all be ignored.
         From the input arguments you should only use a
         """
         # TODO: 2 lines missing.
-        raise NotImplementedError("Implement function body")
+        self.N[a] += 1
+        self.Q[a] += (r - self.Q[a]) / self.N[a]  # Update action-value estimate using incremental mean formula.
 
     def __str__(self):
         return f"BasicAgent_{self.epsilon}"
