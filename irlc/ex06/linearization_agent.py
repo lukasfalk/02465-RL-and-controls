@@ -4,6 +4,8 @@
 References:
   [Her25] Tue Herlau. Sequential decision making. (Freely available online), 2025.
 """
+from xml.parsers.expat import model
+
 from irlc.ex05.dlqr import LQR
 from irlc import Agent
 from irlc.ex06.model_cartpole import GymSinCosCartpoleEnvironment
@@ -22,11 +24,18 @@ class LinearizationAgent(Agent):
         You should use the function model.f to do this, which has build-in functionality to compute Jacobians which will be equal to A, B.
         It is important that you linearize around xbar, ubar. See (Her25, Section 17.1) for further details. """
         # TODO: 4 lines missing.
-        raise NotImplementedError("Insert your solution and remove this error.")
-        Q, q, R = self.model.cost.Q, self.model.cost.q, self.model.cost.R
+        xbar = xbar if xbar is not None else np.zeros((model.state_size))
+        ubar = ubar if ubar is not None else np.zeros((model.action_size))
+        A, B = model.f_jacobian(xbar, ubar)
+        if B.ndim == 1:
+            B = B[:, None]
+        A, B = [A]*N, [B]*N
+        Q = [self.model.cost.Q] * N
+        R = [self.model.cost.R] * N
+        q = [np.zeros(model.state_size)] * N
         """ Define self.L, self.l here as the (lists of) control matrices. """
         # TODO: 1 lines missing.
-        raise NotImplementedError("Compute control matrices L, l here using LQR(...)")
+        self.L, self.l = LQR(A=A, B=B, Q=Q, R=R, q=q)
         super().__init__(env)
 
     def pi(self, x, k, info=None):
@@ -38,7 +47,7 @@ class LinearizationAgent(Agent):
         and this controller will be able to balance the pendulum for an infinite amount of time.
         """
         # TODO: 1 lines missing.
-        raise NotImplementedError("Compute current action here")
+        u = self.L[0] @ x + self.l[0]
         return u
 
 
