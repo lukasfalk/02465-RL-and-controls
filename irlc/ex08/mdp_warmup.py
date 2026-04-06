@@ -37,17 +37,19 @@ def value_function2q_function(mdp : MDP, s, gamma, v : dict) -> dict:
     """
     # TODO: 1 lines missing.
     # TODO: 1 lines missing.
-    raise NotImplementedError("Implement function body")
+    q_dict = {a: sum((r + gamma * v.get(sp, 0)) * p
+                    for (sp, r), p in mdp.Psr(s, a).items())
+            for a in mdp.A(s)}
     return q_dict
 
 def expected_reward(mdp : MDP, s, a) -> float:
     # TODO: 1 lines missing.
-    raise NotImplementedError("Insert your solution and remove this error.")
+    expected_reward = sum(r[1] * probability for (r, probability) in mdp.Psr(s, a).items())
     return expected_reward
 
 def q_function2value_function(policy : dict, Q : dict, s) -> float:
     # TODO: 1 lines missing.
-    raise NotImplementedError("Insert your solution and remove this error.")
+    V_s = sum(policy[a] * Q[s, a] for a in policy.keys())
     return V_s
 
 if __name__ == "__main__":
