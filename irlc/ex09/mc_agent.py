@@ -1,5 +1,6 @@
 # This file may not be shared/redistributed without permission. Please read copyright notice in the git repo. If this file contains other copyright notices disregard this text.
 from collections import defaultdict
+from turtle import done
 import matplotlib.pyplot as plt
 from irlc.ex08.rl_agent import TabularAgent
 from irlc import main_plot, savepdf, train
@@ -22,10 +23,11 @@ def get_MC_return_SA(episode, gamma, first_visit=True):
     returns = []
     for t in reversed(range(len(episode))):
         # TODO: 2 lines missing.
-        raise NotImplementedError("Insert your solution and remove this error.")
+        G = gamma*G + episode[t][2]  # r_t+1 is at index 2 of the episode tuple.
+        sa_t = (episode[t][0], episode[t][1])  # s_t
         if sa_t not in sa[:t] or not first_visit: 
             # TODO: 1 lines missing.
-            raise NotImplementedError("Implement function body")
+            returns.append((sa_t, G))
     return returns
 
 class MCAgent(TabularAgent): 
@@ -38,13 +40,13 @@ class MCAgent(TabularAgent):
         self.episode = []
         super().__init__(env, gamma, epsilon) 
 
-    def pi(self, s,k, info=None): 
+    def pi(self, s, k, info=None): 
         """
         Compute the policy of the MC agent. Remember the agent is epsilon-greedy. You can use the pi_eps(s,info)-function defined
         in the TabularAgent class.
         """
         # TODO: 1 lines missing.
-        raise NotImplementedError("Compute action here using the Q-values. (remember to be epsilon-greedy)")
+        return self.pi_eps(s, info)
 
     def train(self, s, a, r, sp, done=False, info_s=None, info_sp=None):  
         """
@@ -56,7 +58,17 @@ class MCAgent(TabularAgent):
         structure where ``self.Q[s, a]`` defaults to 0 unless the Q-value has been updated.
         """
         # TODO: 12 lines missing.
-        raise NotImplementedError("Train the agent here.")
+        self.episode.append((s, a, r))
+        if done:
+            returns = get_MC_return_SA(self.episode, self.gamma, self.first_visit)
+            for sa, G in returns:
+                if self.alpha:
+                    self.Q[sa] += self.alpha * (G - self.Q[sa])
+                else:
+                    self.returns_sum_S[sa] += G
+                    self.returns_count_N[sa] += 1
+                    self.Q[sa] = self.returns_sum_S[sa] / self.returns_count_N[sa]
+            self.episode = []
 
     def __str__(self):
         return f"MC_{self.gamma}_{self.epsilon}_{self.alpha}_{self.first_visit}"
