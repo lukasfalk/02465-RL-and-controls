@@ -6,17 +6,17 @@ import numpy as np
 def pi_optimal(s : int) -> int: 
     """ Compute the optimal policy for Jar-Jar binks. Don't overthink this one! """
     # TODO: 1 lines missing.
-    raise NotImplementedError("Return the optimal action in state s.")
+    action = 1 if s < 0 else -1
     return action
 
 def Q0_approximate(gamma : float, N : int) -> float: 
     """ Return the (estimate) of the optimal action-value function Q^*(0,1) based on
     the first N rewards using a discount factor of gamma. Note the similarity to the n-step estimator. """
     # TODO: 1 lines missing.
-    raise NotImplementedError("Return N-term approximation of the optimal action-value function Q^*(0,1)")
+    return_estimate = -sum(gamma**(k) for k in range(1, N, 2))
     return return_estimate
 
-def Q_exact(s : int,a : int, gamma : float) -> float:
+def Q_exact(s : int, a : int, gamma : float) -> float:
     """
     Return the exact optimal action-value function Q^*(s,a) in the Jar-Jar problem.
     I recommend focusing on simple cases first, such as the two cases in the problem.
@@ -28,7 +28,14 @@ def Q_exact(s : int,a : int, gamma : float) -> float:
     *Don't* use your solution to Q0_approximate; it is an approximate (finite-horizon) approximation.
     """
     # TODO: 6 lines missing.
-    raise NotImplementedError("return optimal action-value function Q^*(s,a) as a float.")
+    if s < 0:
+        return Q_exact(-s, -a, gamma)
+    if s == 0:
+        return -gamma / (1 - gamma**2)
+    s_next = s + a
+    r = -abs(s)
+    a_next  = pi_optimal(s_next)
+    return r + gamma * Q_exact(s_next, a_next, gamma)
 
 
 if __name__ == "__main__":
