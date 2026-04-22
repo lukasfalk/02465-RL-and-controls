@@ -12,7 +12,8 @@ class TD0ValueAgent(ValueAgent):
 
     def train(self, s, a, r, sp, done=False, info_s=None, info_sp=None): 
         # TODO: 3 lines missing.
-        raise NotImplementedError("Implement function body")
+        self.v[s] = self.v[s] + self.alpha * (r + self.gamma * self.v[sp] - self.v[s])
+        
 
     def __str__(self):
         return f"TD0Value_{self.gamma}_{self.alpha}"
