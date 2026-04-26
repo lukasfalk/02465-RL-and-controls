@@ -23,7 +23,10 @@ class LinearSemiGradQAgent(QAgent):
 
     def train(self, s, a, r, sp, done=False, info_s=None, info_sp=None): 
         # TODO: 4 lines missing.
-        raise NotImplementedError("Implement function body")
+        self.a = a
+        delta = r + self.gamma * self.Q(sp, a) - self.Q(s, a)
+        self.Q.w = self.Q.w + self.alpha * delta * self.Q.x(s, a)
+        self.s = sp
 
     def __str__(self):
         return f"LinearSemiGradQ{self.gamma}_{self.epsilon}_{self.alpha}"
@@ -35,6 +38,7 @@ x = "Episode"
 experiment_q = "experiments/mountaincar_semigrad_q"
 
 if __name__ == "__main__":
+    import irlc.ex11.mountain_car as mountain_car
     env = gym.make("MountainCar500-v0")
     for _ in range(10):
         agent = LinearSemiGradQAgent(env, gamma=1, alpha=alpha, epsilon=0)

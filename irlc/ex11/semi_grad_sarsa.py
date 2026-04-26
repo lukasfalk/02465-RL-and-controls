@@ -19,12 +19,15 @@ class LinearSemiGradSarsa(LinearSemiGradQAgent):
 
     def pi(self, s, k, info=None): 
         # TODO: 1 lines missing.
-        raise NotImplementedError("Implement function body")
+        action = self.pi_eps(s, info)
         return action
 
     def train(self, s, a, r, sp, done=False, info_s=None, info_sp=None):
         # TODO: 4 lines missing.
-        raise NotImplementedError("Insert your solution and remove this error.")
+        self.a = self.pi(s, None, info_s)
+        delta = r + self.gamma * self.Q(sp, self.a) - self.Q(s, a)
+        self.Q.w = self.Q.w + self.alpha * delta * self.Q.x(s, a)
+        self.s = sp
 
         if sum(np.abs(self.Q.w)) > 1e5: raise Exception("Weights diverged. Decrease alpha")
 
