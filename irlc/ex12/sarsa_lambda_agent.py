@@ -32,14 +32,19 @@ class SarsaLambdaAgent(SarsaAgent):
 
     def train(self, s, a, r, sp, done=False, info_s=None, info_sp=None):
         # TODO: 1 lines missing.
-        raise NotImplementedError("a_prime = ... (get action for S'=sp using self.pi_eps; see Sarsa)")
+        a_prime = self.pi_eps(sp, info_sp)  # get action for S'=sp using self.pi_eps; see Sarsa
+        # raise NotImplementedError("a_prime = ... (get action for S'=sp using self.pi_eps; see Sarsa)")
         # TODO: 1 lines missing.
-        raise NotImplementedError("delta = ... (The ordinary Sarsa learning signal)")
+        delta = r + self.gamma*self.Q[sp,a_prime] - self.Q[s,a]  # get the Sarsa learning signal delta
+        # raise NotImplementedError("delta = ... (The ordinary Sarsa learning signal)")
         # TODO: 1 lines missing.
-        raise NotImplementedError("Update the eligibility trace e(s,a) += 1")
+        self.e[(s,a)] += 1  # Update the eligibility trace for the current state-action pair (s,a)
+        # raise NotImplementedError("Update the eligibility trace e(s,a) += 1")
         for (s,a), ee in self.e.items():
             # TODO: 2 lines missing.
-            raise NotImplementedError("Update Q values and eligibility trace")
+            # raise NotImplementedError("Update Q values and eligibility trace")
+            self.Q[(s,a)] += self.alpha * delta * ee
+            self.e[(s,a)] *= self.gamma * self.lamb
         if done: # Clear eligibility trace after each episode and update variables for Sarsa
             self.e.clear()
         else:
@@ -49,7 +54,7 @@ class SarsaLambdaAgent(SarsaAgent):
         return f"SarsaLambda_{self.gamma}_{self.epsilon}_{self.alpha}_{self.lamb}"
 
 if __name__ == "__main__":
-    envn = 'CliffWalking-v0'
+    envn = 'CliffWalking-v1'
     env = gym.make(envn)
 
     alpha =0.05
@@ -62,7 +67,7 @@ if __name__ == "__main__":
         expn = f"experiments/{envn}_{name}"
         train(env, agent, expn, num_episodes=500, max_runs=10)
         experiments.append(expn)
-    main_plot(experiments, smoothing_window=10, resample_ticks=200)
+    main_plot(experiments, smoothing_window=10)
     plt.ylim([-100, 0])
     savepdf("cliff_sarsa_lambda")
     plt.show()

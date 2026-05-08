@@ -22,6 +22,7 @@ class LinearSemiGradSarsaLambda(LinearSemiGradSarsa):
 
     def pi(self, s, k, info=None):
         if k == 0: # If beginning of episode.
+            self.z = np.zeros(self.Q.d)
             self.a = self.pi_eps(s, info)
             self.x = self.Q.x(s,self.a)
             self.Q_old = 0
@@ -36,7 +37,12 @@ class LinearSemiGradSarsaLambda(LinearSemiGradSarsa):
         We use Q_prime = w * x(s', a') to denote the new q-values for (stored for next iteration as in the pseudo code)
         """
         # TODO: 5 lines missing.
-        raise NotImplementedError("Update z, w")
+        Q_current = self.Q.w @ self.Q.x(s,a)  # Get the current Q-value for (s,a)
+        Q_prime = self.Q.w @ x_prime if not done else 0  # Get the Q-value for (s', a') if not done, else 0
+        delta = r + self.gamma * Q_prime - Q_current  # Compute the TD error
+        self.z = self.gamma * self.lamb * self.z + self.Q.x(s, a)# Update eligibility trace
+        self.Q.w = self.Q.w + self.alpha * delta * self.z
+        # raise NotImplementedError("Update z, w")
         if done:  # Reset eligibility trace and time step t as in Sarsa.
             self.z = self.z * 0
         else:
@@ -56,12 +62,12 @@ alpha = 1 / num_of_tilings / 2 # learning rate
 def plot_including_week10(experiments, output):
     exps = ["../ex11/" + e for e in [experiment_q, experiment_sarsa]] + experiments
 
-    main_plot(exps, x_key=x, y_key='Length', smoothing_window=30, resample_ticks=100)
+    main_plot(exps, x_key=x, y_key='Length', smoothing_window=30)
     savepdf(output)
     plt.show()
 
     # Turn off averaging
-    main_plot(exps, x_key=x, y_key='Length', smoothing_window=30, units="Unit", estimator=None, resample_ticks=100)
+    main_plot(exps, x_key=x, y_key='Length', smoothing_window=30, units="Unit", estimator=None)
     savepdf(output+"_individual")
     plt.show()
 
