@@ -48,6 +48,7 @@ class LinearSemiGradSarsaLambda(LinearSemiGradSarsa):
         else:
             self.Q_old, self.x, self.a = Q_prime, x_prime, a_prime
 
+
     def __str__(self):
         return f"LinearSarsaLambda_{self.gamma}_{self.epsilon}_{self.alpha}_{self.lamb}"
 

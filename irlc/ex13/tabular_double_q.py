@@ -40,7 +40,7 @@ class TabularDoubleQ(QAgent):
         Q = np.asarray(Q1) + np.asarray(Q2)
 
         # TODO: 1 lines missing.
-        raise NotImplementedError("Return epsilon-greedy action using Q")
+        return Agent.pi(self, s, k, info) if np.random.rand() < self.epsilon else a1[np.argmax(Q + np.random.rand(len(Q)) * 1e-8)] 
 
 
     def train(self, s, a, r, sp, done=False, info_s=None, info_sp=None): 
@@ -49,14 +49,21 @@ class TabularDoubleQ(QAgent):
         the role of the two Q networks Q1 and Q2. Use the code for the regular Q-agent as inspiration.
         """
         # TODO: 4 lines missing.
-        raise NotImplementedError("Implement function body")
+        if np.random.rand() < 0.5:
+            # Use Q1 to select action, Q2 to evaluate
+            a_star = self.Q1.get_optimal_action(sp, info_sp)
+            self.Q1[s, a] += self.alpha * (r + self.gamma * (self.Q2[sp, a_star] if not done else 0) - self.Q1[s, a])
+        else:
+            # Swap roles
+            a_star = self.Q2.get_optimal_action(sp, info_sp)
+            self.Q2[s, a] += self.alpha * (r + self.gamma * (self.Q1[sp, a_star] if not done else 0) - self.Q2[s, a])
 
     def __str__(self):
         return f"TabularDoubleQ_{self.gamma}_{self.epsilon}_{self.alpha}"
 
 if __name__ == "__main__":
     """ Part 1: Cliffwalking """
-    env = gym.make('CliffWalking-v0')
+    env = gym.make('CliffWalking-v1')
     epsilon = 0.1
     alpha = 0.25
     gamma = 1.0

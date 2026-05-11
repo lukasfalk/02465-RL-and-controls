@@ -58,7 +58,9 @@ class DeepQAgent(TabularAgent):
         """
         s,a,r,sp,done = self.memory.sample(self.batch_size) 
         # TODO: 3 lines missing.
-        raise NotImplementedError("Insert your solution and remove this error.")
+        y = r[:, 0] + self.gamma * np.max(self.Q(sp), axis=1) * (1-done) # Q-learning target
+        target = self.Q(s) # get current Q-values for all actions
+        target[range(len(a)), a] = y # update the target for the taken action
         self.Q.fit(s, target)
 
     def save(self, path): # allows us to save/load model
